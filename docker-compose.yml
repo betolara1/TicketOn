@@ -1,0 +1,73 @@
+services:
+  # 1. BANCO DE DADOS: MySQL 8.0
+  db:
+    image: mysql:8.0
+    container_name: eventos_mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - eventos_network
+    # Garante que o banco está realmente pronto para receber conexões
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  # 2. BACKEND: FastAPI + Python
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: eventos_backend_api
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mapeia a pasta local para refletir alterações de código instantaneamente
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - eventos_network
+
+  # 3. FRONTEND: React + Vite
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: eventos_frontend_app
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    volumes:
+      # Mapeia o código fonte local
+      - ./frontend:/app
+      # Volume anônimo para proteger o node_modules interno do container
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - eventos_network
+
+
+# REDES E VOLUMES PERSISTENTES
+networks:
+  eventos_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
