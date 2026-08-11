@@ -11,5 +11,5 @@ __all__ = [
     "Order",
     "PaymentStatus",
     "Ticket",
-    "TicketStatus",
+    "TicketStatus"
 ]

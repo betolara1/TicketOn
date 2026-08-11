@@ -5,6 +5,7 @@ from sqlalchemy import text
 
 from src.core.config import settings
 from src.core.database import db
+from src.routers import auth_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -21,6 +22,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_router, prefix=settings.API_V1_STR)
 
 @app.get(
     "/health",
