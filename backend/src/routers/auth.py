@@ -71,7 +71,7 @@ def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
 
 
 @router.get(
-    "/me",
+    "/my-data",
     response_model=UserResponse,
     summary="Retorna os dados do usuário atualmente autenticado"
 )

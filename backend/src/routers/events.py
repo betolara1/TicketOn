@@ -37,7 +37,7 @@ def list_published_events(
 
 
 # lista os eventos do organizador logado
-@router.get("/organizer/myevents", response_model = List[EventResponse], summary = "Lista os eventos do organizador logado")
+@router.get("/organizer/my-events", response_model = List[EventResponse], summary = "Lista os eventos do organizador logado")
 def list_organizer_events(
     status: Optional[EventStatus] = None,
     limit: int = Query(10, ge=1, le=100, title="Limite de eventos por página"),
