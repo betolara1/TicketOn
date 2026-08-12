@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from src.core.database import db as get_db
@@ -7,14 +8,15 @@ from src.core.dependencies import get_current_user
 from src.models.user import User
 from src.schemas.user import UserCreate, UserLogin, UserResponse, Token
 
-router = APIRouter(prefix="/auth", tags=["autentication"])
+router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
 
 @router.post(
     "/register",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Cadastra um novo usuário (Organizador, Cliente ou Portaria)")
+    summary="Cadastra um novo usuário (Organizador, Cliente ou Portaria)"
+)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
 
     # Verifica se o e-mail já está em uso
@@ -46,10 +48,10 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     response_model=Token,
     summary="Realiza login e retorna o Token JWT de acesso"
 )
-def login(login_data: UserLogin, db: Session = Depends(get_db)):
+def login(login_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
 
     # Busca o usuário pelo e-mail
-    user = db.query(User).filter(User.email == login_data.email).first()
+    user = db.query(User).filter(User.email == login_data.username).first()
 
     if not user or not verify_password(login_data.password, user.password_hash):
         raise HTTPException(

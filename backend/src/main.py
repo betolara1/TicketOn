@@ -5,7 +5,7 @@ from sqlalchemy import text
 
 from src.core.config import settings
 from src.core.database import db
-from src.routers import auth_router
+from src.routers import auth_router, events_router, ticketmaster_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -24,6 +24,8 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix=settings.API_V1_STR)
+app.include_router(events_router, prefix=settings.API_V1_STR)
+app.include_router(ticketmaster_router, prefix=settings.API_V1_STR)
 
 @app.get(
     "/health",
