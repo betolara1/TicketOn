@@ -1,6 +1,6 @@
 .nav {
-  background-color: #0f172a;
-  border-bottom: 1px solid #1e293b;
+  background-color: #0a0b0e;
+  border-bottom: 1px solid #1f222b;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -15,31 +15,20 @@
   align-items: center;
 }
 
-/* Logo */
 .logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  color: #ffffff;
-  font-size: 1.4rem;
-  font-weight: bold;
 }
 
 .logoImage {
-  width: 400px;
-  height: 100px;
+  width: auto;
+  height: 48px;
   object-fit: contain;
   display: block;
 }
 
-.logoText {
-  background: linear-gradient(45deg, #6366f1, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Links Centrais */
 .links {
   display: flex;
   align-items: center;
@@ -51,33 +40,34 @@
   align-items: center;
   gap: 0.4rem;
   text-decoration: none;
-  color: #94a3b8;
+  color: #9ca3af;
   font-size: 0.95rem;
   font-weight: 500;
   transition: color 0.2s ease-in-out;
 }
 
 .link:hover {
-  color: #ffffff;
+  color: #e62e2d;
 }
 
-/* Botões de Ação Especiais */
+/* Botão Criar Evento (Organizador) */
 .buttonCreate {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: #6366f1;
+  background: linear-gradient(135deg, #ff3b3b, #e62e2d);
   color: #ffffff;
   padding: 0.45rem 0.9rem;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.1s;
 }
 
 .buttonCreate:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: translateY(-1px);
 }
 
 .buttonStaff {
@@ -93,7 +83,7 @@
   font-size: 0.9rem;
 }
 
-/* Seção do Usuário / Login */
+/* Seção do Usuário / Botões de Acesso */
 .userSection {
   display: flex;
   align-items: center;
@@ -109,8 +99,9 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background-color: #1e293b;
-  color: #cbd5e1;
+  background-color: #16181f;
+  border: 1px solid #232733;
+  color: #e5e7eb;
   padding: 0.35rem 0.75rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -138,16 +129,19 @@
 }
 
 .loginBtn {
-  background-color: #6366f1;
+  background: linear-gradient(135deg, #ff3b3b, #e62e2d);
   color: #ffffff;
-  text-decoration: none;
-  padding: 0.45rem 0.9rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.45rem 1.1rem;
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 12px rgba(230, 46, 45, 0.3);
 }
 
 .loginBtn:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: translateY(-1px);
 }

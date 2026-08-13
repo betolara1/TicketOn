@@ -91,10 +91,15 @@ export interface Order {
 }
 
 // TICKETMASTER PARA INTEGRAÇÃO
-export interface TicketValidateRequest {
-  ticket_code: string;
-  current_event_id?: number;
+export interface TicketmasterEventItem {
+  external_id: string;
+  title: string;
+  category?: string;
+  banner_url?: string;
+  suggested_venue?: string;
+  suggested_city?: string;
 }
+
 
 // VALIDAÇÃO NA PORTARIA
 export interface TicketValidateResponse {
