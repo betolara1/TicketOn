@@ -1,4 +1,3 @@
-/* Container Principal da Barra de Navegação */
 .nav {
   background-color: #0f172a;
   border-bottom: 1px solid #1e293b;
@@ -29,8 +28,9 @@
 
 .logoImage {
   width: 400px;
-  height: 150px;
-  object-fit: cover; 
+  height: 100px;
+  object-fit: contain;
+  display: block;
 }
 
 .logoText {
@@ -138,17 +138,6 @@
 }
 
 .loginBtn {
-  color: #cbd5e1;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.loginBtn:hover {
-  color: #ffffff;
-}
-
-.registerBtn {
   background-color: #6366f1;
   color: #ffffff;
   text-decoration: none;
@@ -159,6 +148,6 @@
   transition: opacity 0.2s;
 }
 
-.registerBtn:hover {
+.loginBtn:hover {
   opacity: 0.9;
 }
