@@ -49,10 +49,12 @@ def list_organizer_events(
     if status:
         query = query.filter(Event.status == status)
 
+    query = query.order_by(Event.event_date.desc())
+
     if limit:
         query = query.limit(limit)
 
-    return query.order_by(Event.event_date.desc()).all()
+    return query.all()
 
 
 # detalhes do evento
