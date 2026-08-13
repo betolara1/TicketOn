@@ -2,6 +2,10 @@ export type UserRole = 'ORGANIZER' | 'CUSTOMER' | 'STAFF';
 export type EventStatus = 'DRAFT' | 'PUBLISHED' | 'FINISHED' | 'CANCELLED';
 export type PaymentStatus = 'PENDING' | 'APPROVED' | 'FAILED';
 export type TicketStatus = 'VALID' | 'USED' | 'CANCELLED';
+export type SeatStatus = 'AVAILABLE' | 'SELECTED' | 'SOLD' | 'RESERVED';
+export type ValidationStatus = 'VALID' | 'USED' | 'INVALID' | 'WRONG_EVENT';
+export type PaymentMethod = 'CREDIT_CARD' | 'DEBIT_CARD' | 'PIX';
+
 
 // USUARIO
 export interface User{
@@ -19,14 +23,14 @@ export interface AuthResponse {
     user: User;
 }
 
-// TICKETMASTER
-export interface TicketmasterEventItem {
-    external_id: string;
-    title: string;
-    category?: string;
-    banner_url?: string;
-    suggested_venue?: string;
-    suggested_city?: string;
+// POLTRONA / LUGAR
+export interface Seat {
+  id: number;
+  event_id: number;
+  label: string;
+  row: string;
+  number: number;
+  status: SeatStatus;
 }
 
 // EVENTO CRIADO PELO ORGANIZADOR
@@ -55,11 +59,22 @@ export interface Ticket {
   order_id: number;
   event_id: number;
   ticket_code: string;
-  share_link: string; 
+  share_link: string;
   status: TicketStatus;
+  seat_label?: string;
+  qr_code_base64?: string;
   validated_at?: string;
   created_at: string;
   event?: Event;
+}
+
+// PEDIDO / CHECKOUT
+export interface OrderCreatePayload {
+  event_id: number;
+  quantity: number;
+  seat_ids?: number[];
+  payment_method: PaymentMethod;
+  simulate_fail?: boolean;
 }
 
 // PEDIDO DE COMPRA
@@ -74,3 +89,29 @@ export interface Order {
   tickets: Ticket[];
   event?: Event;
 }
+
+// TICKETMASTER PARA INTEGRAÇÃO
+export interface TicketValidateRequest {
+  ticket_code: string;
+  current_event_id?: number;
+}
+
+// VALIDAÇÃO NA PORTARIA
+export interface TicketValidateResponse {
+  success: boolean;
+  status: ValidationStatus;
+  message: string;
+  ticket_code?: string;
+  event_title?: string;
+  participant_name?: string;
+  seat_label?: string;
+  validated_at?: string;
+  validated_by_name?: string;
+}
+
+
+
+
+
+
+

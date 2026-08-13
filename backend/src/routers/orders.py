@@ -1,12 +1,11 @@
-from sqlalchemy.connectors import pyodbc
-from backend.src.services.payment_service import PaymentService
-from backend.src.models import seats
 import uuid
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+import stripe
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
+from src.core.config import settings
 from src.core.database import db as get_db
 from src.core.dependencies import get_current_user
 
@@ -16,6 +15,7 @@ from src.models.order import Order, PaymentStatus
 from src.models.ticket import Ticket, TicketStatus
 from src.models.seat import Seat, SeatStatus
 from src.schemas.order import OrderCreate, OrderResponse
+from src.services.payment_service import PaymentService
 
 router = APIRouter(prefix = "/orders", tags = ["Pedidos e Checkout"])
 
@@ -66,15 +66,22 @@ def create_order(
     db.add(new_order)
     db.flush()
 
-    approved = PaymentService.charge(total_amount)
-
-    if not approved:
+    try:
+        intent = PaymentService.create_payment(total_amount, new_order.id)
+    except stripe.error.StripeError:
         new_order.payment_status = PaymentStatus.FAILED
-        event.available_capacity += order_in.quantity 
+        event.available_capacity += order_in.quantity
         db.commit()
-        raise HTTPException(status_code=402, detail="Pagamento recusado.")
+        raise HTTPException(status_code=402, detail="Pagamento recusado pelo Stripe.")
+
+    if intent.status != "succeeded":
+        new_order.payment_status = PaymentStatus.FAILED
+        event.available_capacity += order_in.quantity
+        db.commit()
+        raise HTTPException(status_code=402, detail=f"Pagamento não concluído: {intent.status}")
 
     new_order.payment_status = PaymentStatus.APPROVED
+    new_order.stripe_payment_intent_id = intent.id 
 
     for _ in range(order_in.quantity):
         ticket_code = str(uuid.uuid4())
@@ -97,3 +104,18 @@ def create_order(
 @router.get("", response_model = List[OrderResponse], summary = "Lista todos os pedidos do usuário")
 def list_my_orders(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(Order).filter(Order.customer_id == current_user.id).order_by(desc(Order.created_at)).all()
+
+
+@router.post("/payments/webhook")
+async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+    event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+
+    if event["type"] == "payment_intent.succeeded":
+        intent = event["data"]["object"]
+        order = db.query(Order).filter(Order.stripe_payment_intent_id == intent["id"]).first()
+        if order:
+            order.payment_status = PaymentStatus.APPROVED
+            db.commit()
+    return {"received": True}

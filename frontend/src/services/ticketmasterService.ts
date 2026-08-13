@@ -1,11 +1,11 @@
 import { api } from './api';
-import type { TicketmasterEventItem } from '../types';
+import type { TicketValidateRequest } from '../types';
 
 
 export const ticketmasterService = {
   // busca dados na Ticketmaster
-  async searchEvents(keyword?: string, city?: string): Promise<TicketmasterEventItem[]> {
-    const response = await api.get<TicketmasterEventItem[]>('/ticketmaster/events', {
+  async searchEvents(keyword?: string, city?: string): Promise<TicketValidateRequest[]> {
+    const response = await api.get<TicketValidateRequest[]>('/ticketmaster/events', {
       params: { keyword, city },
     });
     

@@ -1,8 +1,8 @@
 from datetime import datetime
 import enum
-from sqlalchemy import DateTime, Enum, Integer, Numeric, ForeignKey, func
+from sqlalchemy import DateTime, Enum, Integer, Numeric, ForeignKey, func, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List
+from typing import List, Optional
 
 from src.core.database import Base
 
@@ -36,3 +36,6 @@ class Order(Base):
     customer: Mapped["User"] = relationship("User", back_populates="orders")
     event: Mapped["Event"] = relationship("Event", back_populates="orders")
     tickets: Mapped[List["Ticket"]] = relationship("Ticket", back_populates="order", cascade="all, delete-orphan")
+
+    stripe_payment_intent_id: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+

@@ -27,6 +27,12 @@
   font-weight: bold;
 }
 
+.logoImage {
+  width: 400px;
+  height: 150px;
+  object-fit: cover; 
+}
+
 .logoText {
   background: linear-gradient(45deg, #6366f1, #a855f7);
   -webkit-background-clip: text;

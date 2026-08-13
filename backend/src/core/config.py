@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     # CORS (Origens permitidas para chamar a API)
     ALLOWED_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+
     @property
     def cors_origins(self) -> List[str]:
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin]

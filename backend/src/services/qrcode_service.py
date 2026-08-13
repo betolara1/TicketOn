@@ -34,6 +34,5 @@ def verify_qr_payload(payload: str) -> str | None:
 def generate_qr_image_base64(payload: str) -> str:
     img = qrcode.make(payload)
     buffer = io.BytesIO()
-    # pyrefly: ignore [unexpected-keyword]
-    img.save(buffer, format="PNG")
+    img.save(buffer)
     return base64.b64encode(buffer.getvalue()).decode()

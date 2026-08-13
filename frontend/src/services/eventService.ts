@@ -1,6 +1,19 @@
 import {api} from './api';
 import type {Event} from '../types';
 
+export interface EventFilter{
+  caregory?: string;
+  city?: string;
+  search?: string;
+  limit?: number;
+}
+
+export type CreateEventInput = Omit<
+  Event,
+  'id' | 'organizer_id' | 'available_capacity' | 'status' | 'created_at' | 'organizer'
+>;
+
+
 export const eventService = {
   // busca eventos com filtros
   async getPublishedEvents(params?: { category?: string; city?: string; search?: string }): Promise<Event[]> {
@@ -16,14 +29,23 @@ export const eventService = {
   },
 
 
-  // cria um novo evento 
-  async createEvent(eventData: Omit<Event, 'id' | 'organizer_id' | 'available_capacity' | 'status' | 'created_at'>): Promise<Event> {
-    const response = await api.post<Event>('/events', eventData,{
-      headers:{
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+  // Cria um novo evento
+  async createEvent(eventData: CreateEventInput): Promise<Event> {
+    const response = await api.post<Event>('/events', eventData);
     return response.data;
+  },
+
+
+  // Atualiza um evento
+  async updateEvent(id: number, eventData: Partial<CreateEventInput>): Promise<Event> {
+    const response = await api.put<Event>(`/events/${id}`, eventData);
+    return response.data;
+  },
+
+
+  // Exclui um evento
+  async deleteEvent(id: number): Promise<void> {
+    await api.delete(`/events/${id}`);
   },
 
 

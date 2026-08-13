@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Ticket, LogOut, User, PlusCircle, QrCode, Calendar } from 'lucide-react';
 import styles from './Navbar.module.css';
+import logoImg from '../../assets/logo.jpeg';
 
 
 export const Navbar: React.FC = () => {
@@ -20,8 +21,7 @@ export const Navbar: React.FC = () => {
             <div className = {styles.container}>
                 {/* LOGO DO TICKETON */}
                 <Link to="/" className = {styles.logo}> 
-                    <Ticket size = {28} color = "#6366f1" />
-                    <span className = {styles.logoText}>TicketOn</span>
+                    <img src={logoImg} alt="TicketOn Logo" className={styles.logoImage} />
                 </Link>
             </div>
 
