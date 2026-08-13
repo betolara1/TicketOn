@@ -31,7 +31,7 @@ export const OrganizerDashboard: React.FC = () => {
     } catch (err: any) {
       console.error('Erro ao buscar eventos:', err);
       
-      // 🔹 Pega a mensagem real enviada pelo backend (se houver)
+      // Pega a mensagem real enviada pelo backend
       const backendMessage = err.response?.data?.detail;
       const status = err.response?.status;
       if (status === 403) {

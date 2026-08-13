@@ -1,0 +1,557 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 5rem;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.subtitle {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+.exploreBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #12141a;
+  border: 1px solid #232733;
+  color: #ffffff;
+  padding: 0.6rem 1.1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.exploreBtn:hover {
+  border-color: #e62e2d;
+  color: #ff4d4d;
+}
+
+/* Abas */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid #232733;
+  padding-bottom: 0.75rem;
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.tabBtn:hover {
+  color: #ffffff;
+  background-color: #1a1d26;
+}
+
+.tabActive {
+  color: #ffffff;
+  background-color: #1a1d26;
+  border-bottom: 2px solid #e62e2d;
+}
+
+.badgeCount {
+  background-color: #232733;
+  color: #e5e7eb;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+}
+
+.errorBanner {
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  padding: 0.85rem 1.2rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Grid de Ingressos */
+.ticketsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card do Ingresso (Estilo Bilhete) */
+.ticketCard {
+  background-color: #12141a;
+  border: 1px solid #232733;
+  border-radius: 16px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.ticketCard:hover {
+  border-color: #e62e2d;
+  transform: translateY(-2px);
+}
+
+.ticketCardUsed {
+  opacity: 0.65;
+  filter: grayscale(0.2);
+}
+
+/* Parte Principal (Lado Esquerdo) */
+.ticketMain {
+  flex: 1;
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  align-items: center;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 140px;
+  height: 100px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background-color: #1a1d26;
+}
+
+.bannerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.statusBadge {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.valid {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.used {
+  background-color: #eab308;
+  color: #000000;
+}
+
+.cancelled {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.ticketBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.categoryText {
+  color: #ff4d4d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eventTitle {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #9ca3af;
+  font-size: 0.88rem;
+}
+
+/* Divisor com Picote */
+.ticketDivider {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 24px;
+}
+
+.notchTop,
+.notchBottom {
+  width: 24px;
+  height: 12px;
+  background-color: #0a0b0e;
+  border: 1px solid #232733;
+}
+
+.notchTop {
+  border-top: none;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.notchBottom {
+  border-bottom: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.dashedLine {
+  flex: 1;
+  border-left: 2px dashed #232733;
+  margin: 6px 0;
+}
+
+/* Lado Direito (Canhoto / QR Code) */
+.ticketStub {
+  width: 200px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background-color: #161822;
+}
+
+.qrWrapper {
+  background-color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.qrWrapper:hover {
+  transform: scale(1.05);
+}
+
+.qrHint {
+  font-size: 0.65rem;
+  color: #4b5563;
+  margin-top: 0.2rem;
+}
+
+.codeText code {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  background-color: #12141a;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.stubActions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.viewQrBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  background: linear-gradient(135deg, #ff3b3b, #e62e2d);
+  color: #ffffff;
+  border: none;
+  padding: 0.45rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.viewQrBtn:hover {
+  opacity: 0.92;
+}
+
+.shareBtn {
+  background-color: #1a1d26;
+  border: 1px solid #2b3040;
+  color: #9ca3af;
+  padding: 0.45rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shareBtn:hover {
+  color: #ffffff;
+  border-color: #e62e2d;
+}
+
+/* Modal do QR Code */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalContent {
+  position: relative;
+  background-color: #12141a;
+  border: 1px solid #232733;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  animation: scaleUp 0.25s ease-out;
+}
+
+.modalClose {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.modalClose:hover {
+  color: #ffffff;
+}
+
+.modalHeader h2 {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.modalHeader p {
+  color: #ff4d4d;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+.modalQrBox {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.modalCodeBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.codeLabel {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.codeBig {
+  font-size: 1.15rem;
+  color: #ffffff;
+  background-color: #1a1d26;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.modalFooter p {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.modalDoneBtn {
+  background-color: #1a1d26;
+  border: 1px solid #2b3040;
+  color: #ffffff;
+  padding: 0.6rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modalDoneBtn:hover {
+  background-color: #232733;
+}
+
+/* Loading & Empty State */
+.loadingContainer,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+  text-align: center;
+  color: #9ca3af;
+  gap: 1rem;
+}
+
+.emptyIcon {
+  color: #4b5563;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: #e62e2d;
+}
+
+.actionBtn {
+  background: linear-gradient(135deg, #ff3b3b, #e62e2d);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: opacity 0.2s;
+}
+
+.actionBtn:hover {
+  opacity: 0.92;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .ticketCard {
+    flex-direction: column;
+  }
+
+  .ticketMain {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .imageWrapper {
+    width: 100%;
+    height: 160px;
+  }
+
+  .ticketDivider {
+    width: 100%;
+    height: 24px;
+    flex-direction: row;
+  }
+
+  .notchTop {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    width: 12px;
+    height: 24px;
+    border-left: none;
+  }
+
+  .notchBottom {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 12px;
+    height: 24px;
+    border-right: none;
+  }
+
+  .dashedLine {
+    border-left: none;
+    border-top: 2px dashed #232733;
+    width: 100%;
+    height: 0;
+  }
+
+  .ticketStub {
+    width: 100%;
+  }
+}

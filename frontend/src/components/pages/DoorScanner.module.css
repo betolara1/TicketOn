@@ -1,0 +1,495 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 4rem;
+}
+
+/* Header */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.badgeStaff {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.subtitle {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+/* Grid Principal */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.scannerSection,
+.resultSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Câmera Card */
+.cameraCard {
+  background-color: #12141a;
+  border: 1px solid #232733;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cameraHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cameraTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.toggleCameraBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnStart {
+  background: linear-gradient(135deg, #ff3b3b, #e62e2d);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(230, 46, 45, 0.3);
+}
+
+.btnStart:hover {
+  opacity: 0.92;
+}
+
+.btnStop {
+  background-color: #1f222b;
+  border: 1px solid #333849;
+  color: #ef4444;
+}
+
+.btnStop:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+.cameraErrorBanner {
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Área de Vídeo da Câmera */
+.cameraViewportWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  background-color: #0a0b0e;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #1f222b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qrReaderBox {
+  width: 100% !important;
+  border: none !important;
+}
+
+.qrReaderBox video {
+  border-radius: 12px !important;
+  object-fit: cover !important;
+}
+
+.cameraPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  color: #9ca3af;
+  gap: 0.5rem;
+}
+
+.placeholderIcon {
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.cameraPlaceholder p {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.cameraPlaceholder span {
+  font-size: 0.85rem;
+}
+
+/* Busca Manual Card */
+.manualCard {
+  background-color: #12141a;
+  border: 1px solid #232733;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.manualTitle {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.manualForm {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.inputWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.9rem;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.manualInput {
+  width: 100%;
+  background-color: #1a1d26;
+  border: 1px solid #2b3040;
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem 0.75rem 2.5rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.manualInput:focus {
+  outline: none;
+  border-color: #e62e2d;
+  box-shadow: 0 0 0 3px rgba(230, 46, 45, 0.2);
+}
+
+.manualSubmitBtn {
+  background: linear-gradient(135deg, #ff3b3b, #e62e2d);
+  color: #ffffff;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.manualSubmitBtn:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.manualSubmitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Card de Resultado */
+.resultCard {
+  background-color: #12141a;
+  border: 1px solid #232733;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 280px;
+}
+
+.resultHeading {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.resultLoading,
+.resultEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  color: #9ca3af;
+  gap: 0.5rem;
+  padding: 2rem 0;
+}
+
+.emptyIcon {
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.resultEmpty p {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.resultEmpty span {
+  font-size: 0.85rem;
+}
+
+/* Status Box */
+.statusBox {
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: popIn 0.25s ease-out;
+}
+
+.statusHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.statusTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.statusMsg {
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+/* Variações de Status */
+.valid {
+  background-color: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.iconValid {
+  color: #10b981;
+}
+
+.used {
+  background-color: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  color: #facc15;
+}
+
+.iconUsed {
+  color: #eab308;
+}
+
+.invalid {
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.iconInvalid {
+  color: #ef4444;
+}
+
+.ticketDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  color: #e5e7eb;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detailRow code {
+  background-color: #1a1d26;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.resetBtn {
+  background-color: #1a1d26;
+  border: 1px solid #2b3040;
+  color: #ffffff;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn:hover {
+  background-color: #232733;
+}
+
+/* Histórico */
+.historyCard {
+  background-color: #12141a;
+  border: 1px solid #232733;
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.historyHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.historyItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background-color: #1a1d26;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.historyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot_valid {
+  background-color: #10b981;
+}
+
+.dot_used {
+  background-color: #eab308;
+}
+
+.dot_invalid {
+  background-color: #ef4444;
+}
+
+.historyInfo {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.historyName {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.historyStatusText {
+  color: #9ca3af;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: #e62e2d;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}
