@@ -1,3 +1,6 @@
+from sqlalchemy.connectors import pyodbc
+from backend.src.services.payment_service import PaymentService
+from backend.src.models import seats
 import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -11,6 +14,7 @@ from src.models.user import User
 from src.models.event import Event, EventStatus
 from src.models.order import Order, PaymentStatus
 from src.models.ticket import Ticket, TicketStatus
+from src.models.seat import Seat, SeatStatus
 from src.schemas.order import OrderCreate, OrderResponse
 
 router = APIRouter(prefix = "/orders", tags = ["Pedidos e Checkout"])
@@ -40,25 +44,44 @@ def create_order(
 
     total_amount = float(event.ticket_price) * order_in.quantity
 
-    event.available_capacity -= order_in.quantity
+    # Tratativa das comprar dos acentos
+    seats = db.query(Seat).filter(Seat.id.in_(order_in.seat_ids), Seat.event_id == event.id).with_for_update().all()
+
+    if len(seats) != len(order_in.seat_ids):
+        raise HTTPException(400, "Algum assento não existe.")
+
+    for seat in seats:
+        if seat.status != SeatStatus.AVAILABLE:
+            raise HTTPException(400, f"Assento {seat.label} já foi vendido.")
+        seat.status = SeatStatus.SOLD
 
     new_order = Order(
         customer_id=current_user.id,
         event_id=event.id,
         quantity=order_in.quantity,
         total_amount=total_amount,
-        payment_status=PaymentStatus.APPROVED
+        payment_status=PaymentStatus.PENDING
     )
 
     db.add(new_order)
     db.flush()
 
+    approved = PaymentService.charge(total_amount)
+
+    if not approved:
+        new_order.payment_status = PaymentStatus.FAILED
+        event.available_capacity += order_in.quantity 
+        db.commit()
+        raise HTTPException(status_code=402, detail="Pagamento recusado.")
+
+    new_order.payment_status = PaymentStatus.APPROVED
 
     for _ in range(order_in.quantity):
+        ticket_code = str(uuid.uuid4())
         ticket = Ticket(
             order_id=new_order.id,
             event_id=event.id,
-            ticket_code=str(uuid.uuid4()),
+            ticket_code=ticket_code,
             share_link=str(uuid.uuid4()),
             status=TicketStatus.VALID
         )
