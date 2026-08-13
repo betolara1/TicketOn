@@ -9,7 +9,7 @@ from src.schemas.event import EventResponse
 # compra do ticket (Checkout)
 class OrderCreate(BaseModel):
     event_id: int = Field(..., gt=0, example=1)
-    quantity: int = Field(..., gt=0, le=10, example=2, description="Quantidade de ingressos (máx 10)")
+    seat_ids: List[int] = Field(..., min_length=1, description="IDs dos assentos escolhidos")
     payment_method: Optional[str] = Field(..., description="Método de pagamento")
 
     

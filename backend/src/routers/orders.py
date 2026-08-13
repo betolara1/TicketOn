@@ -36,13 +36,7 @@ def create_order(
             detail="Este evento não está aberto para vendas."
         )
 
-    if event.available_capacity < order_in.quantity:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Não há ingressos suficientes. Disponíveis: {event.available_capacity}"
-        )
-
-    total_amount = float(event.ticket_price) * order_in.quantity
+    total_amount = float(event.ticket_price) * len(order_in.seat_ids)
 
     # Tratativa das comprar dos acentos
     seats = db.query(Seat).filter(Seat.id.in_(order_in.seat_ids), Seat.event_id == event.id).with_for_update().all()
@@ -57,10 +51,10 @@ def create_order(
 
     new_order = Order(
         customer_id=current_user.id,
-        event_id=event.id,
-        quantity=order_in.quantity,
-        total_amount=total_amount,
-        payment_status=PaymentStatus.PENDING
+        event_id = event.id,
+        quantity = len(seats),
+        total_amount = total_amount,
+        payment_status = PaymentStatus.PENDING
     )
 
     db.add(new_order)
@@ -70,20 +64,22 @@ def create_order(
         intent = PaymentService.create_payment(total_amount, new_order.id)
     except stripe.error.StripeError:
         new_order.payment_status = PaymentStatus.FAILED
-        event.available_capacity += order_in.quantity
+        for seat in seats:
+            seat.status = SeatStatus.AVAILABLE
         db.commit()
         raise HTTPException(status_code=402, detail="Pagamento recusado pelo Stripe.")
 
     if intent.status != "succeeded":
         new_order.payment_status = PaymentStatus.FAILED
-        event.available_capacity += order_in.quantity
+        for seat in seats:
+            seat.status = SeatStatus.AVAILABLE
         db.commit()
         raise HTTPException(status_code=402, detail=f"Pagamento não concluído: {intent.status}")
 
     new_order.payment_status = PaymentStatus.APPROVED
     new_order.stripe_payment_intent_id = intent.id 
 
-    for _ in range(order_in.quantity):
+    for seat in seats:
         ticket_code = str(uuid.uuid4())
         ticket = Ticket(
             order_id=new_order.id,
@@ -93,6 +89,8 @@ def create_order(
             status=TicketStatus.VALID
         )
         db.add(ticket)
+        db.flush()
+        seat.ticket_id = ticket.id
 
     db.commit()
     db.refresh(new_order)
@@ -110,7 +108,11 @@ def list_my_orders(db: Session = Depends(get_db), current_user: User = Depends(g
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
-    event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, settings.STRIPE_WEBHOOK_SECRET)
+    except (ValueError, stripe.error.SignatureVerificationError):
+        raise HTTPException(status_code=400, detail="Webhook inválido.")
 
     if event["type"] == "payment_intent.succeeded":
         intent = event["data"]["object"]
