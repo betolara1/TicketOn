@@ -16,6 +16,7 @@ class TicketResponse(BaseModel):
     validated_at: Optional[datetime] = None
     created_at: datetime
     event: Optional[EventResponse] = None
+    qr_code_base64: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -16,16 +16,13 @@ router = APIRouter(prefix = "/tickets", tags= ["Ingressos/Portaria"])
 # Ingressos do usuário 
 @router.get("/my-tickets", response_model = List[TicketResponse], summary = "Lista os ingressos do usuário")
 def list_my_tickets(db:Session = Depends(get_db), current_user = Depends(get_current_user)):
-    tickets =  db.query(Ticket).join(Ticket.order).filter(Ticket.order.has(customer_id = current_user.id)).order_by(desc(Ticket.created_at)).all()
-
-    result = []
-    for t in tickets:
-        payload = build_qr_payload(t.ticket_code)
-        item = TicketResponse.model_validate(t)
-        item.qr_code_base64 = generate_qr_image_base64(payload)
-        result.append(item)
-    
-    return result
+    return (
+        db.query(Ticket)
+        .join(Ticket.order)
+        .filter(Ticket.order.has(customer_id=current_user.id))
+        .order_by(desc(Ticket.created_at))
+        .all()
+    )
 
 
 # Visualizar Ingresso Compartilhado

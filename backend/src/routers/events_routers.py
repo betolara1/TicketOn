@@ -65,7 +65,55 @@ def get_event_details(event_id: int, db: Session = Depends(get_db)):
     event = db.query(Event).filter(Event.id == event_id).first()
     if not event:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Evento não encontrado")
+    
     return event
+
+
+# listar assentos disponiveis
+@router.get("/{event_id}/seats", response_model=List[SeatResponse], summary="Lista os assentos do evento")
+def get_event_seats(event_id: int, db: Session = Depends(get_db)):
+
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        raise HTTPException(status_code=404, detail="Evento não encontrado")
+    
+    seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
+    
+    # Se o evento ainda não tem assentos cadastrados, gera uma grade padrão de A1 até H12
+    if not seats or len(seats) != event.total_capacity:
+        if seats:
+            db.query(Seat).filter(Seat.event_id == event_id, Seat.status == SeatStatus.AVAILABLE).delete()
+            db.commit()
+            
+        new_seats = generate_seats(event.id, event.total_capacity)
+        db.add_all(new_seats)
+        db.commit()
+        seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
+    return seats
+
+
+def generate_seats(event_id: int, total_capacity: int) -> List[Seat]:
+    seats = 0
+    if total_capacity >= 10:
+        seats = 10
+    else:
+        seats = total_capacity
+    
+    new_seats = []
+
+    for i in range(total_capacity):
+        row = i // seats
+        asc_row = chr(65 + row)
+        seat_number = (i % seats) + 1
+        label = f"{asc_row}{seat_number}"
+
+        new_seats.append(Seat(
+            event_id=event_id,
+            label=label,
+            status=SeatStatus.AVAILABLE
+        ))
+
+    return new_seats
 
 
 # criar evento (somente o organizador)
@@ -89,9 +137,15 @@ def create_event(
         ticket_price=event_create.ticket_price,
         status=EventStatus.PUBLISHED
     )
+
     db.add(event)
     db.commit()
     db.refresh(event)
+
+    seats = generate_seats(event.id, event.total_capacity)
+    db.add_all(seats)
+    db.commit()
+
     return event
 
 # atualizar evento
@@ -119,8 +173,10 @@ def update_event(
     event.total_capacity = event_update.total_capacity
     event.ticket_price = event_update.ticket_price
     event.status = event_update.status
+
     db.commit()
     db.refresh(event)
+
     return event
 
 
@@ -139,27 +195,3 @@ def delete_event(
     db.delete(event)
     db.commit()
     return
-
-# listar assentos disponiveis
-@router.get("/{event_id}/seats", response_model=List[SeatResponse], summary="Lista os assentos do evento")
-def get_event_seats(event_id: int, db: Session = Depends(get_db)):
-    event = db.query(Event).filter(Event.id == event_id).first()
-    if not event:
-        raise HTTPException(status_code=404, detail="Evento não encontrado")
-    seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
-    # Se o evento ainda não tem assentos cadastrados, gera uma grade padrão de A1 até H12
-    if not seats:
-        rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        seats_per_row = 12
-        new_seats = []
-        for r in rows:
-            for n in range(1, seats_per_row + 1):
-                new_seats.append(Seat(
-                    event_id=event_id,
-                    label=f"{r}{n}",
-                    status=SeatStatus.AVAILABLE
-                ))
-        db.add_all(new_seats)
-        db.commit()
-        seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
-    return seats
