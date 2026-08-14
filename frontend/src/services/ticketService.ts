@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { Ticket, TicketValidateResponse } from '../types';
+import type { Ticket, TicketValidateResponse, TicketValidateRequest } from '../types';
 import axios from 'axios';
 
 export const ticketService = {
@@ -16,7 +16,7 @@ export const ticketService = {
   },
 
   // Validação na Portaria (Leitura de Câmera ou Digitação Manual)
-  async validateTicket(payload: TicketValidateResponse): Promise<TicketValidateResponse> {
+  async validateTicket(payload: TicketValidateRequest): Promise<TicketValidateResponse> {
     try {
       const response = await api.post<TicketValidateResponse>('/tickets/validate', {
         ticket_code: payload.ticket_code.trim(),

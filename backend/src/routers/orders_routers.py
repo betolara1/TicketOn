@@ -72,19 +72,28 @@ def create_order(
     if total_amount > 0:
         try:
             intent = PaymentService.create_payment(total_amount, new_order.id)
+
             if intent.status != "succeeded":
-                new_order.payment_status = PaymentStatus.FAILED
+                new_order.payment_status = PaymentStatus.CANCELED
+
                 for seat in seats:
                     seat.status = SeatStatus.AVAILABLE
                 db.commit()
+
                 raise HTTPException(status_code=402, detail=f"Pagamento não concluído: {intent.status}")
+
             new_order.stripe_payment_intent_id = intent.id
+
         except stripe.error.StripeError as e:
-            new_order.payment_status = PaymentStatus.FAILED
+            new_order.payment_status = PaymentStatus.CANCELED
+
             for seat in seats:
                 seat.status = SeatStatus.AVAILABLE
+
             db.commit()
+
             raise HTTPException(status_code=402, detail=f"Pagamento recusado: {str(e)}")
+
     new_order.payment_status = PaymentStatus.APPROVED
     
     # Atualiza a capacidade disponível do evento
@@ -92,11 +101,11 @@ def create_order(
     # Gera os bilhetes com QR Code único para cada ingresso
     for i in range(quantity):
         ticket = Ticket(
-            order_id=new_order.id,
-            event_id=event.id,
-            ticket_code=str(uuid.uuid4()),
-            share_link=str(uuid.uuid4()),
-            status=TicketStatus.VALID
+            order_id = new_order.id,
+            event_id = event.id,
+            ticket_code = str(uuid.uuid4()),
+            share_link = str(uuid.uuid4()),
+            status = TicketStatus.VALID
         )
         db.add(ticket)
         db.flush()
@@ -106,6 +115,43 @@ def create_order(
     db.refresh(new_order)
     return new_order
 
+
+@router.post("/{id}/cancel", summary="Cancelar pedido e devolver ingressos/assentos ao estoque")
+def cancel_order(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    order = db.query(Order).filter(Order.id == id).with_for_update().first()
+
+    if not order:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Pedido não encontrado.")
+
+    if order.customer_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Não é possível cancelar o pedido de outro usuário.")
+    
+    if order.payment_status == PaymentStatus.CANCELED:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Este pedido já foi recusado/cancelado.")
+
+    for ticket in order.tickets:
+        if ticket.status == TicketStatus.USED:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Não é possível cancelar: um ou mais ingressos deste pedido já foram utilizados na portaria.")
+    
+    for ticket in order.tickets:
+        ticket.status = TicketStatus.CANCELLED
+        
+    ticket_ids = [t.id for t in order.tickets]
+    if ticket_ids:
+        seats = db.query(Seat).filter(Seat.ticket_id.in_(ticket_ids)).all()
+        for seat in seats:
+            seat.status = SeatStatus.AVAILABLE
+            seat.ticket_id = None
+
+    event = db.query(Event).filter(Event.id == order.event_id).with_for_update().first()
+    if event:
+        event.available_capacity += order.quantity
+
+    order.payment_status = PaymentStatus.CANCELED
+    
+    db.commit()
+    db.refresh(order)
+    return {"message": "Pedido cancelado com sucesso e assentos devolvidos ao estoque."}
 
 
 @router.get("", response_model = List[OrderResponse], summary = "Lista todos os pedidos do usuário")

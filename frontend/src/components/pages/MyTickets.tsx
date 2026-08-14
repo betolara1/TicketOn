@@ -17,6 +17,7 @@ import {
   ArrowRight 
 } from 'lucide-react';
 import styles from './MyTickets.module.css';
+import { orderService } from '../../services/orderService';
 
 export const MyTickets: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -32,21 +33,21 @@ export const MyTickets: React.FC = () => {
   // Feedback de cópia do link
   const [copiedId, setCopiedId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await ticketService.getMyTickets();
-        setTickets(data);
-      } catch (err: any) {
-        console.error('Erro ao buscar ingressos:', err);
-        setError('Não foi possível carregar seus ingressos. Tente novamente mais tarde.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTickets = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await ticketService.getMyTickets();
+      setTickets(data);
+    } catch (err: any) {
+      console.error('Erro ao buscar ingressos:', err);
+      setError('Não foi possível carregar seus ingressos. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTickets();
   }, []);
 
@@ -55,6 +56,24 @@ export const MyTickets: React.FC = () => {
     navigator.clipboard.writeText(fullUrl);
     setCopiedId(ticket.id);
     setTimeout(() => setCopiedId(null), 2500);
+  };
+
+  const handleCancelOrder = async (orderId: number) => {
+    const confirm = window.confirm(
+      'Tem certeza que deseja cancelar este ingresso? Seus assentos serão liberados para outros compradores.'
+    );
+    if (!confirm) return;
+    try {
+      setLoading(true);
+      await orderService.cancelOrder(orderId);
+      alert('Ingresso cancelado com sucesso! Seus assentos foram liberados.');
+      await fetchTickets();
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || 'Erro ao cancelar ingresso.';
+      alert(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formatDate = (dateStr?: string) => {
@@ -204,10 +223,6 @@ export const MyTickets: React.FC = () => {
                     <span className={styles.qrHint}>Toque para ampliar</span>
                   </div>
 
-                  <div className={styles.codeText}>
-                    <code>{ticket.qr_payload}</code>
-                  </div>
-
                   <div className={styles.stubActions}>
                     <button
                       type="button"
@@ -226,6 +241,16 @@ export const MyTickets: React.FC = () => {
                     >
                       {copiedId === ticket.id ? <Check size={16} /> : <Share2 size={16} />}
                     </button>
+                    {isValid && (
+                      <button
+                        type="button"
+                        onClick={() => handleCancelOrder(ticket.order_id)}
+                        className={styles.cancelBtn}
+                        title="Cancelar ingresso e liberar assentos"
+                      >
+                        Cancelar
+                      </button>
+                    )}
                   </div>
                 </div>
 

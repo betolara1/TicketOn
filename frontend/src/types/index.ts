@@ -1,6 +1,6 @@
 export type UserRole = 'ORGANIZER' | 'CUSTOMER' | 'STAFF';
 export type EventStatus = 'DRAFT' | 'PUBLISHED' | 'FINISHED' | 'CANCELLED';
-export type PaymentStatus = 'PENDING' | 'APPROVED' | 'FAILED';
+export type PaymentStatus = 'PENDING' | 'APPROVED' | 'FAILED' | 'CANCELED';
 export type TicketStatus = 'VALID' | 'USED' | 'CANCELLED';
 export type SeatStatus = 'AVAILABLE' | 'SELECTED' | 'SOLD' | 'RESERVED';
 export type ValidationStatus = 'VALID' | 'USED' | 'INVALID';
@@ -102,6 +102,11 @@ export interface TicketmasterEventItem {
 }
 
 
+
+// VALIDAÇÃO DE INGRESSO (PORTARIA)
+export interface TicketValidateRequest {
+  ticket_code: string;
+}
 
 export interface TicketValidateResponse {
   success: boolean;

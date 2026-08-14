@@ -11,6 +11,7 @@ class PaymentStatus(str, enum.Enum):
     PENDING = "PENDING"
     APPROVED = "APPROVED"
     FAILED = "FAILED"
+    CANCELED = "CANCELED"
 
 
 class Order(Base):

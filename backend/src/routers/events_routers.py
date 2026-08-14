@@ -79,12 +79,8 @@ def get_event_seats(event_id: int, db: Session = Depends(get_db)):
     
     seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
     
-    # Se o evento ainda não tem assentos cadastrados, gera uma grade padrão de A1 até H12
-    if not seats or len(seats) != event.total_capacity:
-        if seats:
-            db.query(Seat).filter(Seat.event_id == event_id, Seat.status == SeatStatus.AVAILABLE).delete()
-            db.commit()
-            
+    # Se o evento ainda não tem assentos cadastrados, gera os assentos iniciais
+    if not seats:
         new_seats = generate_seats(event.id, event.total_capacity)
         db.add_all(new_seats)
         db.commit()
@@ -92,20 +88,26 @@ def get_event_seats(event_id: int, db: Session = Depends(get_db)):
     return seats
 
 
+def get_row_label(row_index: int) -> str:
+    label = ""
+    while row_index >= 0:
+        label = chr(65 + (row_index % 26)) + label
+        row_index = (row_index // 26) - 1
+    return label
+
+
 def generate_seats(event_id: int, total_capacity: int) -> List[Seat]:
-    seats = 0
-    if total_capacity >= 10:
-        seats = 10
-    else:
-        seats = total_capacity
+    seats_per_row = 10 if total_capacity >= 10 else total_capacity
+    if seats_per_row <= 0:
+        return []
     
     new_seats = []
 
     for i in range(total_capacity):
-        row = i // seats
-        asc_row = chr(65 + row)
-        seat_number = (i % seats) + 1
-        label = f"{asc_row}{seat_number}"
+        row_idx = i // seats_per_row
+        row_label = get_row_label(row_idx)
+        seat_number = (i % seats_per_row) + 1
+        label = f"{row_label}{seat_number}"
 
         new_seats.append(Seat(
             event_id=event_id,

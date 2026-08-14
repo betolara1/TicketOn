@@ -1,4 +1,3 @@
-// src/components/modals/SeatSelectionModal.tsx
 import React, { useState, useEffect } from 'react';
 import { seatService } from '../../services/seatService';
 import type { Event, Seat } from '../../types';
@@ -36,50 +35,65 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen && event.id) {
-      const loadSeats = async () => {
-        try {
-          setLoading(true);
-          setError(null);
-          const data = await seatService.getEventSeats(event.id);
-          setSeats(data);
-          setSelectedSeatIds([]);
-        } catch (err: any) {
-          console.error('Erro ao buscar assentos:', err);
-          setError('Não foi possível carregar o mapa de assentos.');
-        } finally {
-          setLoading(false);
-        }
-      };
+    if (!isOpen || !event.id) return;
 
-      loadSeats();
-    }
+    const loadSeatsInitial = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await seatService.getEventSeats(event.id);
+        setSeats(data);
+        setSelectedSeatIds([]);
+      } catch (err: any) {
+        console.error('Erro ao buscar assentos:', err);
+        setError('Não foi possível carregar o mapa de assentos.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadSeatsInitial();
+
+    const interval = setInterval(async () => {
+      try {
+        const updatedSeats = await seatService.getEventSeats(event.id);
+        setSeats(updatedSeats);
+        setSelectedSeatIds((prevSelected) => {
+          const availableIds = updatedSeats
+            .filter((s) => s.status === 'AVAILABLE')
+            .map((s) => s.id);
+          return prevSelected.filter((id) => availableIds.includes(id));
+        });
+      } catch (err) {
+        console.error('Erro no polling de assentos:', err);
+      }
+    }, 2500);
+    
+    return () => clearInterval(interval);
   }, [isOpen, event.id]);
 
   if (!isOpen) return null;
 
   const handleSeatClick = (seat: Seat) => {
-    if (seat.status !== 'AVAILABLE') return; // Assento ocupado não pode ser clicado
+    if (seat.status !== 'AVAILABLE') return;
 
     const isSelected = selectedSeatIds.includes(seat.id);
 
     if (isSelected) {
-      // Remove da seleção
       setSelectedSeatIds((prev) => prev.filter((id) => id !== seat.id));
-    } else {
-      // Se já atingiu a quantidade máxima, remove o mais antigo e adiciona o novo
+    } 
+    else {
       if (selectedSeatIds.length >= requiredQuantity) {
         setSelectedSeatIds((prev) => [...prev.slice(1), seat.id]);
-      } else {
+      } 
+      else {
         setSelectedSeatIds((prev) => [...prev, seat.id]);
       }
     }
   };
 
-  // Agrupa os assentos por letra da fileira (ex: "A", "B", "C")
   const groupedSeats: { [row: string]: Seat[] } = {};
   seats.forEach((seat) => {
-    const rowLetter = seat.label.charAt(0);
+    const rowLetter = seat.label.replace(/[0-9]/g, '') || 'A';
     if (!groupedSeats[rowLetter]) {
       groupedSeats[rowLetter] = [];
     }
@@ -175,7 +189,7 @@ export const SeatSelectionModal: React.FC<SeatSelectionModalProps> = ({
                           `}
                           title={`Assento ${seat.label}`}
                         >
-                          {isSold ? <User size={12} /> : seat.label.slice(1)}
+                          {isSold ? <User size={12} /> : seat.label.replace(/^[A-Za-z]+/, '')}
                         </button>
                       );
                     })}
