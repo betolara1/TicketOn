@@ -17,13 +17,20 @@ router = APIRouter(prefix = "/tickets", tags= ["Ingressos/Portaria"])
 # Ingressos do usuário 
 @router.get("/my-tickets", response_model = List[TicketResponse], summary = "Lista os ingressos do usuário")
 def list_my_tickets(db:Session = Depends(get_db), current_user = Depends(get_current_user)):
-    return (
+    tickets = (
         db.query(Ticket)
         .join(Ticket.order)
         .filter(Ticket.order.has(customer_id=current_user.id))
         .order_by(desc(Ticket.created_at))
         .all()
     )
+
+    result = []
+    for t in tickets:
+        item = TicketResponse.model_validate(t)
+        item.qr_payload = build_qr_payload(t.ticket_code)
+        result.append(item)
+    return result
 
 
 # Visualizar Ingresso Compartilhado
@@ -84,13 +91,13 @@ def validate_ticket_entrance(payload: TicketValidateRequest, db: Session = Depen
     seat_label = seat.label if seat else None
 
     return TicketValidateResponse(
-        success=True,
-        message="Acesso Liberado! Ingresso válido.",
-        status="VALID",
-        ticket_code=ticket.ticket_code,
-        event_title=ticket.event.title,
-        participant_name=participant_name,
-        seat_label=seat_label,
-        validated_at=now,
-        validated_by_name=current_user.name
+        success = True,
+        message = "Acesso Liberado! Ingresso válido.",
+        status = "VALID",
+        ticket_code = build_qr_payload(ticket.ticket_code),
+        event_title = ticket.event.title, 
+        participant_name = participant_name,
+        seat_label = seat_label,
+        validated_at = now,
+        validated_by_name = current_user.name
     )

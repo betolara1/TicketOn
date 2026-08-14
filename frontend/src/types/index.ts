@@ -3,7 +3,7 @@ export type EventStatus = 'DRAFT' | 'PUBLISHED' | 'FINISHED' | 'CANCELLED';
 export type PaymentStatus = 'PENDING' | 'APPROVED' | 'FAILED';
 export type TicketStatus = 'VALID' | 'USED' | 'CANCELLED';
 export type SeatStatus = 'AVAILABLE' | 'SELECTED' | 'SOLD' | 'RESERVED';
-export type ValidationStatus = 'VALID' | 'USED' | 'INVALID' | 'WRONG_EVENT';
+export type ValidationStatus = 'VALID' | 'USED' | 'INVALID';
 export type PaymentMethod = 'CREDIT_CARD' | 'DEBIT_CARD' | 'PIX';
 
 
@@ -59,6 +59,7 @@ export interface Ticket {
   order_id: number;
   event_id: number;
   ticket_code: string;
+  qr_payload: string;
   share_link: string;
   status: TicketStatus;
   seat_label?: string;
@@ -101,7 +102,7 @@ export interface TicketmasterEventItem {
 }
 
 
-// VALIDAÇÃO NA PORTARIA
+
 export interface TicketValidateResponse {
   success: boolean;
   status: ValidationStatus;

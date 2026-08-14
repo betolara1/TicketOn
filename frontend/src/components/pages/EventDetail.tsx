@@ -8,8 +8,6 @@ import {
   Calendar, 
   MapPin, 
   Tag, 
-  Users, 
-  CreditCard, 
   QrCode, 
   CheckCircle2, 
   AlertCircle, 
@@ -26,7 +24,7 @@ import { SeatSelectionModal } from '../modal/SeatSelectionModal';
 export const EventDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated, isStaff } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
@@ -102,44 +100,6 @@ export const EventDetail: React.FC = () => {
       if (event && next > event.available_capacity) return prev;
       return next;
     });
-  };
-
-  const handleCheckout = async () => {
-    if (!isAuthenticated) {
-      alert('Você precisa estar conectado em uma conta para comprar ingressos.');
-      return;
-    }
-
-    if (!event) return;
-
-    try {
-      setBuying(true);
-      setPurchaseError(null);
-
-      await orderService.createOrder({
-        event_id: event.id,
-        quantity,
-        payment_method: paymentMethod,
-      });
-
-      setPurchaseSuccess(true);
-      setTimeout(() => {
-        navigate('/my-tickets');
-      }, 2000);
-    } catch (err: any) {
-      console.error('Erro no checkout:', err);
-      
-      const detail = err.response?.data?.detail;
-      let msg = 'Erro ao processar pagamento. Tente novamente.';
-      if (typeof detail === 'string') {
-        msg = detail;
-      } else if (Array.isArray(detail) && detail.length > 0) {
-        msg = detail[0].msg || 'Dados inválidos no pedido.';
-      }
-      setPurchaseError(msg);
-    } finally {
-      setBuying(false);
-    }
   };
 
   const formatDate = (dateStr: string) => {

@@ -17,6 +17,7 @@ class TicketResponse(BaseModel):
     created_at: datetime
     event: Optional[EventResponse] = None
     qr_code_base64: Optional[str] = None
+    qr_payload: str = ""
 
     model_config = ConfigDict(from_attributes=True)
 

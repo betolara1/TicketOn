@@ -7,11 +7,11 @@ import { ProtectedRoute } from './routes/ProtectedRoute';
 import { EventList } from './components/pages/EventList';
 import { EventDetail } from './components/pages/EventDetail';
 import { Login } from './components/pages/Login';
-import { Register } from './components/pages/Register';
 import { MyTickets } from './components/pages/MyTickets';
 import { OrganizerDashboard } from './components/pages/organizer/OrganizerDashboard';
 import { EventForm } from './components/pages/organizer/EventForm';
 import { DoorScanner } from './components/pages/DoorScanner';
+import { SharedLink } from './components/pages/SharedLink';
 
 export const App: React.FC = () => {
   return (
@@ -25,7 +25,7 @@ export const App: React.FC = () => {
             <Route path="/" element={<EventList />} />
             <Route path="/eventos/:id" element={<EventDetail />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/tickets/share/:shareLink" element={<SharedLink />} />
 
             {/* Rotas protegidas de CLIENTE */}
             <Route element={<ProtectedRoute allowedRoles={['CUSTOMER']} />}>

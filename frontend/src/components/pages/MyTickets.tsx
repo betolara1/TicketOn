@@ -195,7 +195,7 @@ export const MyTickets: React.FC = () => {
                 <div className={styles.ticketStub}>
                   <div className={styles.qrWrapper} onClick={() => setSelectedTicket(ticket)}>
                     <QRCodeSVG
-                      value={ticket.ticket_code}
+                      value={ticket.qr_payload}
                       size={100}
                       bgColor="#ffffff"
                       fgColor="#000000"
@@ -205,7 +205,7 @@ export const MyTickets: React.FC = () => {
                   </div>
 
                   <div className={styles.codeText}>
-                    <code>{ticket.ticket_code}</code>
+                    <code>{ticket.qr_payload}</code>
                   </div>
 
                   <div className={styles.stubActions}>
@@ -254,7 +254,7 @@ export const MyTickets: React.FC = () => {
 
             <div className={styles.modalQrBox}>
               <QRCodeSVG
-                value={selectedTicket.ticket_code}
+                value={selectedTicket.qr_payload}
                 size={220}
                 bgColor="#ffffff"
                 fgColor="#000000"
@@ -264,7 +264,7 @@ export const MyTickets: React.FC = () => {
 
             <div className={styles.modalCodeBox}>
               <span className={styles.codeLabel}>Código do Bilhete</span>
-              <code className={styles.codeBig}>{selectedTicket.ticket_code}</code>
+              <code className={styles.codeBig}>{selectedTicket.qr_payload}</code>
             </div>
 
             <div className={styles.modalFooter}>
