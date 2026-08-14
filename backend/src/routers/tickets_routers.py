@@ -1,4 +1,3 @@
-from asyncio import base_events
 from datetime import datetime
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -9,7 +8,7 @@ from src.core.database import db as get_db
 from src.core.dependencies import get_current_user, require_roles
 from src.models.user import User, UserRole
 from src.models.ticket import Ticket, TicketStatus
-from src.schemas.ticket import (TicketResponse, TicketPublicResponse, TicketValidateRequest, TicketValidateResponse)
+from src.schemas.ticket_schema import (TicketResponse, TicketPublicResponse, TicketValidateRequest, TicketValidateResponse)
 from src.services.qrcode_service import verify_qr_payload, build_qr_payload, generate_qr_image_base64
 
 router = APIRouter(prefix = "/tickets", tags= ["Ingressos/Portaria"])

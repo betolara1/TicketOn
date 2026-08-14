@@ -1,7 +1,8 @@
-from src.schemas.user import UserBase, UserCreate, UserLogin, UserResponse, Token, TokenPayload
-from src.schemas.event import TicketmasterEventItem, EventBase, EventCreate, EventUpdate, EventResponse
-from src.schemas.ticket import TicketResponse, TicketValidateRequest, TicketValidateResponse
-from src.schemas.order import OrderCreate, OrderResponse
+from src.schemas.user_schema import UserBase, UserCreate, UserLogin, UserResponse, Token, TokenPayload
+from src.schemas.event_schema import TicketmasterEventItem, EventBase, EventCreate, EventUpdate, EventResponse
+from src.schemas.ticket_schema import TicketResponse, TicketPublicResponse, TicketValidateRequest, TicketValidateResponse
+from src.schemas.order_schema import OrderCreate, OrderResponse
+from src.schemas.seats_schema import SeatResponse
 
 __all__ = [
     "UserBase",
@@ -16,8 +17,10 @@ __all__ = [
     "EventUpdate",
     "EventResponse",
     "TicketResponse",
+    "TicketPublicResponse",
     "TicketValidateRequest",
     "TicketValidateResponse",
+    "SeatResponse",
     "OrderCreate",
     "OrderResponse",
 ]

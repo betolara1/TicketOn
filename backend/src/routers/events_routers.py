@@ -9,7 +9,9 @@ from src.core.dependencies import get_current_user, require_roles
 
 from src.models.user import User, UserRole
 from src.models.event import Event, EventStatus
-from src.schemas.event import EventCreate, EventUpdate, EventResponse
+from src.schemas.event_schema import EventCreate, EventUpdate, EventResponse
+from src.models.seat import Seat, SeatStatus
+from src.schemas.seats_schema import SeatResponse
 
 router = APIRouter(prefix="/events", tags=["Eventos"])
 
@@ -137,3 +139,27 @@ def delete_event(
     db.delete(event)
     db.commit()
     return
+
+# listar assentos disponiveis
+@router.get("/{event_id}/seats", response_model=List[SeatResponse], summary="Lista os assentos do evento")
+def get_event_seats(event_id: int, db: Session = Depends(get_db)):
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        raise HTTPException(status_code=404, detail="Evento não encontrado")
+    seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
+    # Se o evento ainda não tem assentos cadastrados, gera uma grade padrão de A1 até H12
+    if not seats:
+        rows = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        seats_per_row = 12
+        new_seats = []
+        for r in rows:
+            for n in range(1, seats_per_row + 1):
+                new_seats.append(Seat(
+                    event_id=event_id,
+                    label=f"{r}{n}",
+                    status=SeatStatus.AVAILABLE
+                ))
+        db.add_all(new_seats)
+        db.commit()
+        seats = db.query(Seat).filter(Seat.event_id == event_id).order_by(Seat.id.asc()).all()
+    return seats

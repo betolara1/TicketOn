@@ -21,6 +21,7 @@ import {
   Ticket 
 } from 'lucide-react';
 import styles from './EventDetail.module.css';
+import { SeatSelectionModal } from '../modal/SeatSelectionModal';
 
 export const EventDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,6 +38,8 @@ export const EventDetail: React.FC = () => {
   const [buying, setBuying] = useState(false);
   const [purchaseSuccess, setPurchaseSuccess] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
+
+  const [isSeatModalOpen, setIsSeatModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -56,6 +59,41 @@ export const EventDetail: React.FC = () => {
 
     fetchEvent();
   }, [id]);
+
+  const handleOpenSeatSelection = () => {
+    if (!isAuthenticated) {
+      alert('Você precisa estar conectado em uma conta para comprar ingressos.');
+      return;
+    }
+    setIsSeatModalOpen(true);
+  };
+  // 2. Quando o usuário confirma as cadeiras dentro do modal
+  const handleConfirmSeatsAndCheckout = async (selectedSeatIds: number[]) => {
+    if (!event) return;
+    try {
+      setBuying(true);
+      setPurchaseError(null);
+      await orderService.createOrder({
+        event_id: event.id,
+        quantity,
+        seat_ids: selectedSeatIds,
+        payment_method: paymentMethod,
+      });
+      setIsSeatModalOpen(false);
+      setPurchaseSuccess(true);
+      setTimeout(() => {
+        navigate('/my-tickets');
+      }, 1800);
+    } catch (err: any) {
+      console.error('Erro no checkout:', err);
+      const detail = err.response?.data?.detail;
+      const msg = typeof detail === 'string' ? detail : 'Erro ao processar compra dos assentos.';
+      setPurchaseError(msg);
+      alert(msg);
+    } finally {
+      setBuying(false);
+    }
+  };
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prev) => {
@@ -90,7 +128,14 @@ export const EventDetail: React.FC = () => {
       }, 2000);
     } catch (err: any) {
       console.error('Erro no checkout:', err);
-      const msg = err.response?.data?.detail || 'Erro ao processar pagamento. Tente novamente.';
+      
+      const detail = err.response?.data?.detail;
+      let msg = 'Erro ao processar pagamento. Tente novamente.';
+      if (typeof detail === 'string') {
+        msg = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        msg = detail[0].msg || 'Dados inválidos no pedido.';
+      }
       setPurchaseError(msg);
     } finally {
       setBuying(false);
@@ -332,31 +377,30 @@ export const EventDetail: React.FC = () => {
                 )}
 
                 {/* Botão de Compra */}
-                <button
-                  type="button"
-                  onClick={handleCheckout}
-                  disabled={buying}
-                  className={styles.buyNowBtn}
-                >
-                  {buying ? (
-                    <>
-                      <Loader2 size={18} className={styles.spinner} />
-                      <span>Processando Pedido...</span>
-                    </>
-                  ) : !isAuthenticated ? (
-                    'Entrar para Comprar'
-                  ) : (
-                    'Garantir Meu Ingresso'
-                  )}
-                </button>
+      <button
+        type="button"
+        onClick={handleOpenSeatSelection}
+        disabled={buying}
+        className={styles.buyNowBtn}
+      >
+        {!isAuthenticated ? 'Entrar para Comprar' : 'Garantir Meu Ingresso'}
+      </button>
+
+      {event && (
+        <SeatSelectionModal
+          isOpen={isSeatModalOpen}
+          onClose={() => setIsSeatModalOpen(false)}
+          event={event}
+          requiredQuantity={quantity}
+          onConfirm={handleConfirmSeatsAndCheckout}
+          loadingCheckout={buying}
+        />
+      )}
               </>
             )}
-
           </div>
         </aside>
-
       </div>
-
     </div>
   );
 };

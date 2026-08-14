@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from src.models.ticket import TicketStatus
-from src.schemas.event import EventResponse
+from src.schemas.event_schema import EventResponse
 
 
 # Base comum com os campos compartilhados

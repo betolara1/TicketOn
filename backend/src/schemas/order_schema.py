@@ -2,14 +2,15 @@ from datetime import datetime
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 from src.models.order import PaymentStatus
-from src.schemas.ticket import TicketResponse
-from src.schemas.event import EventResponse
+from src.schemas.ticket_schema import TicketResponse
+from src.schemas.event_schema import EventResponse
 
 
 # compra do ticket (Checkout)
 class OrderCreate(BaseModel):
-    event_id: int = Field(..., gt=0, example=1)
-    seat_ids: List[int] = Field(..., min_length=1, description="IDs dos assentos escolhidos")
+    event_id: int = Field(..., gt=0, example=1)    
+    quantity: int = Field(default=1, gt=0, description="Quantidade de ingressos")
+    seat_ids: Optional[List[int]] = Field(default=None, description="IDs dos assentos (opcional)")
     payment_method: Optional[str] = Field(..., description="Método de pagamento")
 
     

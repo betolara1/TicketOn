@@ -14,7 +14,7 @@ from src.models.event import Event, EventStatus
 from src.models.order import Order, PaymentStatus
 from src.models.ticket import Ticket, TicketStatus
 from src.models.seat import Seat, SeatStatus
-from src.schemas.order import OrderCreate, OrderResponse
+from src.schemas.order_schema import OrderCreate, OrderResponse
 from src.services.payment_service import PaymentService
 
 router = APIRouter(prefix = "/orders", tags = ["Pedidos e Checkout"])
@@ -36,18 +36,27 @@ def create_order(
             detail="Este evento não está aberto para vendas."
         )
 
-    total_amount = float(event.ticket_price) * len(order_in.seat_ids)
+    quantity = len(order_in.seat_ids) if order_in.seat_ids else order_in.quantity
 
-    # Tratativa das comprar dos acentos
-    seats = db.query(Seat).filter(Seat.id.in_(order_in.seat_ids), Seat.event_id == event.id).with_for_update().all()
+    if event.available_capacity < quantity:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Não há ingressos suficientes disponíveis. Restam apenas {event.available_capacity}."
+        )
+    
 
-    if len(seats) != len(order_in.seat_ids):
-        raise HTTPException(400, "Algum assento não existe.")
+    total_amount = float(event.ticket_price) * quantity
 
-    for seat in seats:
-        if seat.status != SeatStatus.AVAILABLE:
-            raise HTTPException(400, f"Assento {seat.label} já foi vendido.")
-        seat.status = SeatStatus.SOLD
+
+    seats = []
+    if order_in.seat_ids:
+        seats = db.query(Seat).filter(Seat.id.in_(order_in.seat_ids), Seat.event_id == event.id).with_for_update().all()
+        if len(seats) != len(order_in.seat_ids):
+            raise HTTPException(400, "Algum assento selecionado não existe.")
+        for seat in seats:
+            if seat.status != SeatStatus.AVAILABLE:
+                raise HTTPException(400, f"Assento {seat.label} já foi vendido.")
+            seat.status = SeatStatus.SOLD
 
     new_order = Order(
         customer_id=current_user.id,
@@ -60,41 +69,41 @@ def create_order(
     db.add(new_order)
     db.flush()
 
-    try:
-        intent = PaymentService.create_payment(total_amount, new_order.id)
-    except stripe.error.StripeError:
-        new_order.payment_status = PaymentStatus.FAILED
-        for seat in seats:
-            seat.status = SeatStatus.AVAILABLE
-        db.commit()
-        raise HTTPException(status_code=402, detail="Pagamento recusado pelo Stripe.")
-
-    if intent.status != "succeeded":
-        new_order.payment_status = PaymentStatus.FAILED
-        for seat in seats:
-            seat.status = SeatStatus.AVAILABLE
-        db.commit()
-        raise HTTPException(status_code=402, detail=f"Pagamento não concluído: {intent.status}")
-
+    if total_amount > 0:
+        try:
+            intent = PaymentService.create_payment(total_amount, new_order.id)
+            if intent.status != "succeeded":
+                new_order.payment_status = PaymentStatus.FAILED
+                for seat in seats:
+                    seat.status = SeatStatus.AVAILABLE
+                db.commit()
+                raise HTTPException(status_code=402, detail=f"Pagamento não concluído: {intent.status}")
+            new_order.stripe_payment_intent_id = intent.id
+        except stripe.error.StripeError as e:
+            new_order.payment_status = PaymentStatus.FAILED
+            for seat in seats:
+                seat.status = SeatStatus.AVAILABLE
+            db.commit()
+            raise HTTPException(status_code=402, detail=f"Pagamento recusado: {str(e)}")
     new_order.payment_status = PaymentStatus.APPROVED
-    new_order.stripe_payment_intent_id = intent.id 
-
-    for seat in seats:
-        ticket_code = str(uuid.uuid4())
+    
+    # Atualiza a capacidade disponível do evento
+    event.available_capacity -= quantity
+    # Gera os bilhetes com QR Code único para cada ingresso
+    for i in range(quantity):
         ticket = Ticket(
             order_id=new_order.id,
             event_id=event.id,
-            ticket_code=ticket_code,
+            ticket_code=str(uuid.uuid4()),
             share_link=str(uuid.uuid4()),
             status=TicketStatus.VALID
         )
         db.add(ticket)
         db.flush()
-        seat.ticket_id = ticket.id
-
+        if seats and i < len(seats):
+            seats[i].ticket_id = ticket.id
     db.commit()
     db.refresh(new_order)
-
     return new_order
 
 

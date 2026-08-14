@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from src.core.dependencies import get_current_user
 from src.models.user import User
 
-from src.schemas.event import TicketmasterEventItem
+from src.schemas.event_schema import TicketmasterEventItem
 from src.services.ticketmaster_service import TicketmasterService
 
 router = APIRouter(prefix="/ticketmaster", tags=["Ticketmaster"])

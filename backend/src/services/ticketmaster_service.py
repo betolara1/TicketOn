@@ -1,7 +1,7 @@
 from typing import List, Optional
 import httpx
 from src.core.config import settings
-from src.schemas.event import TicketmasterEventItem
+from src.schemas.event_schema import TicketmasterEventItem
 
 
 class TicketmasterService:

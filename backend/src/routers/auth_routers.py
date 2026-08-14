@@ -6,7 +6,7 @@ from src.core.database import db as get_db
 from src.core.security import get_password_hash, verify_password, create_access_token
 from src.core.dependencies import get_current_user
 from src.models.user import User
-from src.schemas.user import UserCreate, UserLogin, UserResponse, Token
+from src.schemas.user_schema import UserCreate, UserLogin, UserResponse, Token
 
 router = APIRouter(prefix="/auth", tags=["Autenticação"])
 

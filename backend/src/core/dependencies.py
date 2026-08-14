@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from src.core.config import settings
 from src.core.database import db
 from src.models.user import User, UserRole
-from src.schemas.user import TokenPayload
+from src.schemas.user_schema import TokenPayload
 
 # Informa ao FastAPI que o token vem no cabeçalho Authorization no formato Bearer
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")

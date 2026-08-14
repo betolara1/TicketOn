@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 from src.models.event import EventStatus
-from src.schemas.user import UserResponse
+from src.schemas.user_schema import UserResponse
 
 
 # Base comum com os campos compartilhados

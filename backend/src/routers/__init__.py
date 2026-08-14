@@ -1,8 +1,8 @@
-from src.routers.auth import router as auth_router
-from src.routers.events import router as events_router
-from src.routers.ticketmaster import router as ticketmaster_router
-from src.routers.orders import router as orders_router
-from src.routers.tickets import router as tickets_router
+from src.routers.auth_routers import router as auth_router
+from src.routers.events_routers import router as events_router
+from src.routers.ticketmaster_routers import router as ticketmaster_router
+from src.routers.orders_routers import router as orders_router
+from src.routers.tickets_routers import router as tickets_router
 
 
 __all__ = [
