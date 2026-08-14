@@ -42,7 +42,10 @@ class TicketValidateRequest(BaseModel):
 class TicketValidateResponse(BaseModel):
     success: bool
     message: str
+    status: str = "VALID"
     ticket_code: str
     event_title: str
+    participant_name: Optional[str] = None
+    seat_label: Optional[str] = None
     validated_at: datetime
     validated_by_name: str

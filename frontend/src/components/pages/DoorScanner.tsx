@@ -14,8 +14,7 @@ import {
   RefreshCw, 
   User, 
   Calendar, 
-  ShieldCheck, 
-  History 
+  ShieldCheck
 } from 'lucide-react';
 import styles from './DoorScanner.module.css';
 
@@ -24,7 +23,6 @@ export const DoorScanner: React.FC = () => {
   const [manualCode, setManualCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastValidation, setLastValidation] = useState<TicketValidateResponse | null>(null);
-  const [validationHistory, setValidationHistory] = useState<TicketValidateResponse[]>([]);
   const [cameraError, setCameraError] = useState<string | null>(null);
 
   const html5QrCodeRef = useRef<Html5Qrcode | null>(null);
@@ -53,7 +51,7 @@ export const DoorScanner: React.FC = () => {
             }, 2500);
           }
         },
-        (errorMessage) => {
+        (_errorMessage) => {
           // Leituras em frames sem QR Code são ignoradas silenciosamente
         }
       );
@@ -102,7 +100,6 @@ export const DoorScanner: React.FC = () => {
       const result = await ticketService.validateTicket({ ticket_code: code });
       
       setLastValidation(result);
-      setValidationHistory((prev) => [result, ...prev.slice(0, 9)]); // Mantém os últimos 10
       setManualCode('');
     } catch (err: any) {
       console.error('Erro na validação:', err);
@@ -284,32 +281,6 @@ export const DoorScanner: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* HISTÓRICO RECENTE */}
-          {validationHistory.length > 0 && (
-            <div className={styles.historyCard}>
-              <div className={styles.historyHeader}>
-                <History size={18} />
-                <h3>Últimas Leituras</h3>
-              </div>
-
-              <div className={styles.historyList}>
-                {validationHistory.map((item, index) => (
-                  <div key={index} className={styles.historyItem}>
-                    <span className={`${styles.historyDot} ${styles[`dot_${item.status.toLowerCase()}`]}`} />
-                    <div className={styles.historyInfo}>
-                      <span className={styles.historyName}>
-                        {item.participant_name || item.ticket_code || 'Ingresso'}
-                      </span>
-                      <span className={styles.historyStatusText}>
-                        {item.status === 'VALID' ? 'Liberado' : item.status === 'USED' ? 'Já utilizado' : 'Inválido'}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
         </div>
 

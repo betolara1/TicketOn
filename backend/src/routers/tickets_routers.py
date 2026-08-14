@@ -10,6 +10,7 @@ from src.models.user import User, UserRole
 from src.models.ticket import Ticket, TicketStatus
 from src.schemas.ticket_schema import (TicketResponse, TicketPublicResponse, TicketValidateRequest, TicketValidateResponse)
 from src.services.qrcode_service import verify_qr_payload, build_qr_payload, generate_qr_image_base64
+from src.models.seat import Seat
 
 router = APIRouter(prefix = "/tickets", tags= ["Ingressos/Portaria"])
 
@@ -77,11 +78,19 @@ def validate_ticket_entrance(payload: TicketValidateRequest, db: Session = Depen
     db.commit()
     db.refresh(ticket)
 
+    participant_name = ticket.order.customer.name if ticket.order and ticket.order.customer else None
+
+    seat = db.query(Seat).filter(Seat.ticket_id == ticket.id).first()
+    seat_label = seat.label if seat else None
+
     return TicketValidateResponse(
         success=True,
         message="Acesso Liberado! Ingresso válido.",
+        status="VALID",
         ticket_code=ticket.ticket_code,
         event_title=ticket.event.title,
+        participant_name=participant_name,
+        seat_label=seat_label,
         validated_at=now,
         validated_by_name=current_user.name
     )

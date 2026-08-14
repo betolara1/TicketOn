@@ -22,13 +22,20 @@ def build_qr_payload(ticket_code: str) -> str:
 
 
 def verify_qr_payload(payload: str) -> str | None:
-    if "." not in payload:
+    if not payload:
         return None
-    ticket_code, signature = payload.rsplit(".", 1)
-    expected = _sign(ticket_code)
-    if hmac.compare_digest(expected, signature):
-        return ticket_code
-    return None
+    
+    clean_payload = payload.strip()
+
+    if "." in clean_payload:
+        ticket_code, signature = clean_payload.rsplit(".", 1)
+        expected = _sign(ticket_code)
+
+        if hmac.compare_digest(expected, signature):
+            return ticket_code
+        return None
+
+    return clean_payload
 
 
 def generate_qr_image_base64(payload: str) -> str:
