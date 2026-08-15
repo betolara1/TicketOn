@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Instancia do axios para fazer chamada pro Backend
 export const api = axios.create({
-    baseURL: 'http://localhost:8000/api/v1',
+    baseURL: import.meta.env.VITE_API_URL,
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json'
