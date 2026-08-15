@@ -111,7 +111,7 @@
   background-color: #1a1d26;
   border: 1px solid #2b3040;
   border-radius: 8px;
-  padding: 0.75rem 0.9rem 0.75rem 2.5rem;
+  padding: 0.75rem 2.5rem 0.75rem 2.5rem;
   color: #ffffff;
   font-size: 0.95rem;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -127,6 +127,101 @@
   outline: none;
   border-color: #e62e2d;
   box-shadow: 0 0 0 3px rgba(230, 46, 45, 0.2);
+}
+
+.togglePasswordBtn {
+  position: absolute;
+  right: 0.8rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.togglePasswordBtn:hover {
+  color: #d1d5db;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.passwordValidation {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #161820;
+  border: 1px solid #232733;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.strengthContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.strengthTrack {
+  flex: 1;
+  height: 4px;
+  background-color: #232733;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.strengthBar {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strengthText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 45px;
+  text-align: right;
+}
+
+.requirementsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.reqItem {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  transition: color 0.2s;
+}
+
+.reqMet {
+  color: #4ade80;
+}
+
+.reqUnmet {
+  color: #6b7280;
+}
+
+.reqIconMet {
+  color: #22c55e;
+  flex-shrink: 0;
+}
+
+.reqDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #4b5563;
+  margin: 0 4px;
+  flex-shrink: 0;
 }
 
 .submitBtn {
