@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import styles from './EventDetail.module.css';
 import { SeatSelectionModal } from '../modal/SeatSelectionModal';
+import { AuthModal } from '../auth/AuthModal';
 
 export const EventDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,6 +39,7 @@ export const EventDetail: React.FC = () => {
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   const [isSeatModalOpen, setIsSeatModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -60,7 +62,7 @@ export const EventDetail: React.FC = () => {
 
   const handleOpenSeatSelection = () => {
     if (!isAuthenticated) {
-      alert('Você precisa estar conectado em uma conta para comprar ingressos.');
+      setIsAuthModalOpen(true);
       return;
     }
     setIsSeatModalOpen(true);
@@ -337,25 +339,31 @@ export const EventDetail: React.FC = () => {
                 )}
 
                 {/* Botão de Compra */}
-      <button
-        type="button"
-        onClick={handleOpenSeatSelection}
-        disabled={buying}
-        className={styles.buyNowBtn}
-      >
-        {!isAuthenticated ? 'Entrar para Comprar' : 'Garantir Meu Ingresso'}
-      </button>
+                  <button
+                    type="button"
+                    onClick={handleOpenSeatSelection}
+                    disabled={buying}
+                    className={styles.buyNowBtn}
+                  >
+                    {!isAuthenticated ? 'Entrar para Comprar' : 'Garantir Meu Ingresso'}
+                  </button>
 
-      {event && (
-        <SeatSelectionModal
-          isOpen={isSeatModalOpen}
-          onClose={() => setIsSeatModalOpen(false)}
-          event={event}
-          requiredQuantity={quantity}
-          onConfirm={handleConfirmSeatsAndCheckout}
-          loadingCheckout={buying}
-        />
-      )}
+                  {event && (
+                    <SeatSelectionModal
+                      isOpen={isSeatModalOpen}
+                      onClose={() => setIsSeatModalOpen(false)}
+                      event={event}
+                      requiredQuantity={quantity}
+                      onConfirm={handleConfirmSeatsAndCheckout}
+                      loadingCheckout={buying}
+                    />
+                  )}
+
+                  <AuthModal
+                    isOpen={isAuthModalOpen}
+                    initialMode="login"
+                    onClose={() => setIsAuthModalOpen(false)}
+                  />
               </>
             )}
           </div>
