@@ -133,14 +133,8 @@ export const EventForm: React.FC = () => {
                   onChange={(e) => setCategory(e.target.value)}
                   className={styles.select}
                 >
-                  <option value="Música">Música / Shows</option>
-                  <option value="Festival">Festival</option>
-                  <option value="Teatro">Teatro & Espetáculos</option>
-                  <option value="Stand-up">Stand-up & Comédia</option>
-                  <option value="Esporte">Esportes</option>
-                  <option value="Tecnologia">Tecnologia & Conferência</option>
-                  <option value="Gastronomia">Gastronomia</option>
-                  <option value="Outros">Outros</option>
+                  <option value="Cinema">Cinema</option>
+                  <option value="Outro">Outro</option>
                 </select>
               </div>
 
