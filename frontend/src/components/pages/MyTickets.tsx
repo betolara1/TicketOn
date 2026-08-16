@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { ticketService } from '../../services/ticketService';
 import type { Ticket } from '../../types';
-import { 
-  Ticket as TicketIcon, 
-  Calendar, 
-  MapPin, 
-  QrCode, 
-  Share2, 
-  Check, 
-  X, 
-  Loader2, 
-  AlertCircle, 
-  Sparkles, 
-  ArrowRight 
+import {
+  Ticket as TicketIcon,
+  Calendar,
+  MapPin,
+  QrCode,
+  Share2,
+  Check,
+  X,
+  Loader2,
+  AlertCircle,
+  Sparkles,
+  ArrowRight
 } from 'lucide-react';
 import styles from './MyTickets.module.css';
 import { orderService } from '../../services/orderService';
@@ -29,7 +29,7 @@ export const MyTickets: React.FC = () => {
 
   // Modal do QR Code
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
-  
+
   // Feedback de cópia do link
   const [copiedId, setCopiedId] = useState<number | null>(null);
 
@@ -99,7 +99,7 @@ export const MyTickets: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      
+
       {/* CABEÇALHO */}
       <div className={styles.header}>
         <div>
@@ -156,8 +156,8 @@ export const MyTickets: React.FC = () => {
         <div className={styles.emptyState}>
           <TicketIcon size={52} className={styles.emptyIcon} />
           <h3>
-            {activeTab === 'active' 
-              ? 'Você não possui ingressos ativos no momento' 
+            {activeTab === 'active'
+              ? 'Você não possui ingressos ativos no momento'
               : 'Nenhum histórico de ingressos utilizado'}
           </h3>
           <p>Garanta já o seu lugar nos melhores shows e festivais!</p>
@@ -172,7 +172,7 @@ export const MyTickets: React.FC = () => {
 
             return (
               <div key={ticket.id} className={`${styles.ticketCard} ${!isValid ? styles.ticketCardUsed : ''}`}>
-                
+
                 {/* LADO ESQUERDO: IMAGEM E DETALHES DO EVENTO */}
                 <div className={styles.ticketMain}>
                   <div className={styles.imageWrapper}>
@@ -245,7 +245,7 @@ export const MyTickets: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleCancelOrder(ticket.order_id)}
-                        className={styles.cancelBtn}
+                        className={styles.viewQrBtn}
                         title="Cancelar ingresso e liberar assentos"
                       >
                         Cancelar

@@ -4,16 +4,16 @@ import { useAuth } from '../../context/AuthContext';
 import { eventService } from '../../services/eventService';
 import { ticketmasterService } from '../../services/ticketmasterService';
 import type { Event, TicketmasterEventItem } from '../../types';
-import { 
-  Search, 
-  MapPin, 
-  Calendar, 
-  Tag, 
-  Ticket, 
-  Globe, 
-  Sparkles, 
-  PlusCircle, 
-  Loader2 
+import {
+  Search,
+  MapPin,
+  Calendar,
+  Tag,
+  Ticket,
+  Globe,
+  Sparkles,
+  PlusCircle,
+  Loader2
 } from 'lucide-react';
 import styles from './EventList.module.css';
 
@@ -24,7 +24,7 @@ export const EventList: React.FC = () => {
   // Estados de dados
   const [localEvents, setLocalEvents] = useState<Event[]>([]);
   const [tmEvents, setTmEvents] = useState<TicketmasterEventItem[]>([]);
-  
+
   // Estados de UI e Filtros
   const [activeTab, setActiveTab] = useState<'ticketon' | 'ticketmaster'>('ticketon');
   const [searchTerm, setSearchTerm] = useState('');
@@ -115,7 +115,7 @@ export const EventList: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      
+
       {/* CABEÇALHO HERO */}
       <section className={styles.hero}>
         <h1 className={styles.heroTitle}>
@@ -229,7 +229,7 @@ export const EventList: React.FC = () => {
 
                     <div className={styles.cardBody}>
                       <h3 className={styles.cardTitle}>{event.title}</h3>
-                      
+
                       <div className={styles.cardInfo}>
                         <div className={styles.infoRow}>
                           <Calendar size={15} />

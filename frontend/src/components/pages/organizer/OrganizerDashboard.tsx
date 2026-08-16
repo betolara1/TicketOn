@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { eventService } from '../../../services/eventService';
 import type { Event } from '../../../types';
-import { 
-  PlusCircle, 
-  Calendar, 
-  MapPin, 
-  Ticket, 
-  DollarSign, 
-  Trash2, 
-  ExternalLink, 
-  Loader2, 
-  AlertCircle 
+import {
+  PlusCircle,
+  Calendar,
+  MapPin,
+  Ticket,
+  DollarSign,
+  Trash2,
+  ExternalLink,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import styles from './OrganizerDashboard.module.css';
 
@@ -30,7 +30,7 @@ export const OrganizerDashboard: React.FC = () => {
       setEvents(data);
     } catch (err: any) {
       console.error('Erro ao buscar eventos:', err);
-      
+
       // Pega a mensagem real enviada pelo backend
       const backendMessage = err.response?.data?.detail;
       const status = err.response?.status;
@@ -93,7 +93,7 @@ export const OrganizerDashboard: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      
+
       {/* CABEÇALHO */}
       <div className={styles.header}>
         <div>
@@ -183,8 +183,8 @@ export const OrganizerDashboard: React.FC = () => {
               <tbody>
                 {events.map((ev) => {
                   const soldTickets = ev.total_capacity - ev.available_capacity;
-                  const percentSold = ev.total_capacity > 0 
-                    ? Math.round((soldTickets / ev.total_capacity) * 100) 
+                  const percentSold = ev.total_capacity > 0
+                    ? Math.round((soldTickets / ev.total_capacity) * 100)
                     : 0;
 
                   return (
