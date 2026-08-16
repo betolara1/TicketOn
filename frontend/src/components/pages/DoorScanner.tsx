@@ -36,10 +36,25 @@ export const DoorScanner: React.FC = () => {
       html5QrCodeRef.current = scanner;
 
       await scanner.start(
-        { facingMode: 'environment' }, // Câmera traseira no celular
+        { facingMode: 'environment' }, // Câmera traseira no celular / webcam
         {
-          fps: 10,
-          qrbox: { width: 260, height: 260 },
+          fps: 15,
+          qrbox: (viewfinderWidth, viewfinderHeight) => {
+            const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+            const qrboxSize = Math.floor(minEdge * 0.8);
+            return {
+              width: qrboxSize,
+              height: qrboxSize,
+            };
+          },
+          videoConstraints: {
+            facingMode: 'environment',
+            width: { min: 640, ideal: 1280, max: 1920 },
+            height: { min: 480, ideal: 720, max: 1080 },
+          },
+          experimentalFeatures: {
+            useBarCodeDetectorIfSupported: true,
+          },
         },
         async (decodedText) => {
           if (!isScanningRef.current) {
