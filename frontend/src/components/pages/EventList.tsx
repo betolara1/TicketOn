@@ -121,9 +121,6 @@ export const EventList: React.FC = () => {
         <h1 className={styles.heroTitle}>
           Garantindo a diversão em <span className={styles.highlight}>um Ticket</span>
         </h1>
-        <p className={styles.heroSubtitle}>
-          Encontre os melhores shows, festivais e eventos no Brasil e no mundo.
-        </p>
 
         {/* BARRA DE PESQUISA */}
         <form onSubmit={handleSearchSubmit} className={styles.searchBar}>
