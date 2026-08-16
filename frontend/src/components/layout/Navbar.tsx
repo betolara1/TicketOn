@@ -30,7 +30,7 @@ export const Navbar: React.FC = () => {
                     
                     {/* LOGO */}
                     <Link to="/" className={styles.logo}> 
-                        <img src={logoImg} alt="TicketOn Logo" className={styles.logoImage} />
+                        <span className={styles.logoText}>TicketOn</span>
                     </Link>
 
                     {/* LINKS CENTRAIS */}

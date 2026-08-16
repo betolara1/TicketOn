@@ -128,7 +128,7 @@ export const EventList: React.FC = () => {
             <Search size={20} className={styles.searchIcon} />
             <input
               type="text"
-              placeholder="Buscar por evento, artista ou atração..."
+              placeholder="Buscar por evento, filme ou atração..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={styles.searchInput}

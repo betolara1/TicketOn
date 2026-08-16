@@ -22,11 +22,11 @@
   text-decoration: none;
 }
 
-.logoImage {
-  width: auto;
-  height: 48px;
-  object-fit: contain;
-  display: block;
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ff3b3b;
+  letter-spacing: -0.05em;
 }
 
 .links {
