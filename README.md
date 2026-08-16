@@ -243,3 +243,5 @@ O uso da IA teve como foco acelerar o aprendizado em funcionalidades específica
 * Infraestrutura e Deploy: A configuração do Docker Compose foi desenvolvida com base em experiências anteriores. A aplicação foi colocada no ar com o Frontend publicado na Vercel e o Backend hospedado em servidor próprio na Contabo.
 
 * Ordem de Desenvolvimento: Conforme o histórico de commits do repositório, o backend foi construído primeiro, seguido pelo desenvolvimento do frontend, integração das APIs (incluindo Ticketmaster), testes automatizados e deploy.
+
+* O teste do leito de QR Code foi feito de tela pra tela, ou seja, de celular pra celular ou celular pra computador. Foi notado que o leitor demorou um pouco pra reconhecer o código em algumas circunstâncias. Isso pode ser um problema com a iluminação do ambiente ou com a qualidade da câmera/tela do dispositivo utilizado para leitura. 
