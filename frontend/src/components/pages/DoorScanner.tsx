@@ -50,9 +50,6 @@ export const DoorScanner: React.FC = () => {
           videoConstraints: {
             facingMode: 'environment',
           },
-          experimentalFeatures: {
-            useBarCodeDetectorIfSupported: true,
-          },
         },
         async (decodedText) => {
           if (!isScanningRef.current) {
