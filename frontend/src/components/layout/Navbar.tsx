@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import { Ticket, LogOut, User, PlusCircle, QrCode, Calendar } from 'lucide-react';
 import { AuthModal } from '../auth/AuthModal';
 import styles from './Navbar.module.css';
-import logoImg from '../../assets/logo.jpeg';
 
 export const Navbar: React.FC = () => {
     const { user, isAuthenticated, isOrganizer, isStaff, logout } = useAuth();
