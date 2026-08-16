@@ -128,7 +128,7 @@
 .cameraViewportWrapper {
   position: relative;
   width: 100%;
-  min-height: 280px;
+  height: 360px;
   background-color: #0a0b0e;
   border-radius: 12px;
   overflow: hidden;
@@ -140,12 +140,31 @@
 
 .qrReaderBox {
   width: 100% !important;
+  height: 100% !important;
   border: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative;
+}
+
+.qrReaderBox > div {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  position: relative !important;
 }
 
 .qrReaderBox video {
-  border-radius: 12px !important;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover !important;
+  border-radius: 12px !important;
+  display: block !important;
+}
+
+.qrReaderBox canvas {
+  display: none !important;
 }
 
 .cameraPlaceholder {
