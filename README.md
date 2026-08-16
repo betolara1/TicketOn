@@ -105,10 +105,10 @@ graph TB
 O sistema contém os quatro usuários para testes:
 
 
-| `CUSTOMER` (Cliente 1) | `comprador1@email.com` | `Senhaforte@1` | Reserva assentos, realiza pagamento simulado e acessa "Meus Ingressos" |
-| `CUSTOMER` (Cliente 2) | `comprador2@email.com` | `Senhaforte@1` | Segundo cliente para validar reservas concorrentes e fluxo de checkout |
-| `ORGANIZER` (Organizador)| `organizador@email.com` | `Senhaforte@1` | Criação/gestão de eventos, importação via Ticketmaster e mapa de assentos |
-| `STAFF` (Portaria) | `portaria@email.com` | `Senhaforte@1` | Validação de ingressos na portaria via câmera ou código manual |
+* | `CUSTOMER` (Cliente 1) | `comprador1@email.com` | `Senhaforte@1` | Reserva assentos, realiza pagamento simulado e acessa "Meus Ingressos" |
+* | `CUSTOMER` (Cliente 2) | `comprador2@email.com` | `Senhaforte@1` | Segundo cliente para validar reservas concorrentes e fluxo de checkout |
+* | `ORGANIZER` (Organizador)| `organizador@email.com` | `Senhaforte@1` | Criação/gestão de eventos, importação via Ticketmaster e mapa de assentos |
+* | `STAFF` (Portaria) | `portaria@email.com` | `Senhaforte@1` | Validação de ingressos na portaria via câmera ou código manual |
 
 
 ---
