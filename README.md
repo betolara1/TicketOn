@@ -234,7 +234,7 @@ O uso da IA teve como foco acelerar o aprendizado em funcionalidades específica
 
 * Segurança do QR Code: Recorri a estudos com a IA para estruturar um payload assinado criptograficamente, assegurando que o QR Code emitido para o cliente não pudesse ser forjado por ferramentas externas.
 
-* Identidade Visual: A estruturação dos estilos teve como referência bases de design modernas, sendo totalmente reestruturada com CSS Modules para se adequar às particularidades do projeto. Todas as paletas de cores, tipografia, responsividade e layout foram de autoria própria. Busquei inspiração em plataformas consagradas de ingressos (como *Ingresso.com*, *Eventim* e *Sympla*), garantindo uma interface original, polida e agradável, distante de templates genéricos gerados automaticamente.
+* Identidade Visual: A estruturação dos estilos teve como referência bases de design modernas, sendo reestruturada com CSS Modules para fazer do meu gosto. Todas as paletas de cores e layout foram de minha autoria.
 
 * Testes e Qualidade: O Pytest foi estruturado com o apoio da IA para garantir que regras críticas de segurança estivessem blindadas. Paralelamente, todos os fluxos foram exaustivamente validados de forma manual por mim e minha esposa, identificando e corrigindo bugs pontuais de usabilidade antes da entrega.
 
@@ -244,4 +244,4 @@ O uso da IA teve como foco acelerar o aprendizado em funcionalidades específica
 
 * Ordem de Desenvolvimento: Conforme o histórico de commits do repositório, o backend foi construído primeiro, seguido pelo desenvolvimento do frontend, integração das APIs (incluindo Ticketmaster), testes automatizados e deploy.
 
-* O teste do leito de QR Code foi feito de tela pra tela, ou seja, de celular pra celular ou celular pra computador. Foi notado que o leitor demorou um pouco pra reconhecer o código em algumas circunstâncias. Isso pode ser um problema com a iluminação do ambiente ou com a qualidade da câmera/tela do dispositivo utilizado para leitura. 
+* Leitor de QR Code: O teste do leito de QR Code foi feito de tela pra tela, ou seja, de celular pra celular ou celular pra computador. Foi notado que o leitor demorou um pouco pra reconhecer o código em algumas circunstâncias. Isso pode ser um problema com a iluminação do ambiente ou com a qualidade da câmera/tela do dispositivo utilizado para leitura. 
