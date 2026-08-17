@@ -234,7 +234,7 @@ O uso da IA teve como foco acelerar o aprendizado em funcionalidades específica
 
 * Segurança do QR Code: Recorri a estudos com a IA para estruturar um payload assinado criptograficamente, assegurando que o QR Code emitido para o cliente não pudesse ser forjado por ferramentas externas.
 
-* Identidade Visual e Fuga do "AI Slop": A estruturação dos estilos teve como referência bases de design modernas, sendo totalmente reestruturada com CSS Modules para se adequar às particularidades do projeto. Todas as paletas de cores, tipografia, responsividade e layout foram de autoria própria. Busquei inspiração em plataformas consagradas de ingressos (como *Ingresso.com*, *Eventim* e *Sympla*), garantindo uma interface original, polida e agradável, distante de templates genéricos gerados automaticamente.
+* Identidade Visual: A estruturação dos estilos teve como referência bases de design modernas, sendo totalmente reestruturada com CSS Modules para se adequar às particularidades do projeto. Todas as paletas de cores, tipografia, responsividade e layout foram de autoria própria. Busquei inspiração em plataformas consagradas de ingressos (como *Ingresso.com*, *Eventim* e *Sympla*), garantindo uma interface original, polida e agradável, distante de templates genéricos gerados automaticamente.
 
 * Testes e Qualidade: O Pytest foi estruturado com o apoio da IA para garantir que regras críticas de segurança estivessem blindadas. Paralelamente, todos os fluxos foram exaustivamente validados de forma manual por mim e minha esposa, identificando e corrigindo bugs pontuais de usabilidade antes da entrega.
 
