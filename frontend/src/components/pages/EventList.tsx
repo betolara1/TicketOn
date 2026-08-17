@@ -60,6 +60,7 @@ export const EventList: React.FC = () => {
       setTmEvents(data);
     } catch (error) {
       console.error('Erro ao buscar Ticketmaster:', error);
+      setTmEvents([]);
     } finally {
       setLoading(false);
     }
