@@ -6,7 +6,6 @@ import { ProtectedRoute } from './routes/ProtectedRoute';
 
 import { EventList } from './components/pages/EventList';
 import { EventDetail } from './components/pages/EventDetail';
-import { Login } from './components/pages/Login';
 import { MyTickets } from './components/pages/MyTickets';
 import { OrganizerDashboard } from './components/pages/organizer/OrganizerDashboard';
 import { EventForm } from './components/pages/organizer/EventForm';
@@ -24,7 +23,6 @@ export const App: React.FC = () => {
             {/* Rotas públicas — qualquer um acessa, logado ou não */}
             <Route path="/" element={<EventList />} />
             <Route path="/eventos/:id" element={<EventDetail />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/tickets/share/:shareLink" element={<SharedLink />} />
 
             {/* Rotas protegidas de CLIENTE */}
